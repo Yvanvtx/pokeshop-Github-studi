@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - pokeshop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f2f2f2;
+        }
+
+        .signup-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+
+        .signup-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .signup-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .signup-container button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1em;
+        }
+
+        .signup-container button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="signup-container">
+        <h2>Inscription</h2>
+        <input type="text" id="signupPseudo" placeholder="Pseudo" required>
+        <input type="email" id="signupEmail" placeholder="Adresse e-mail" required>
+        <input type="password" id="signupPassword" placeholder="Mot de passe" required>
+        <input type="password" id="signupPasswordConfirm" placeholder="Confirmer mot de passe" required>
+        <button onclick="signup()">S'inscrire</button>
+    </div>
+
+    <script>
+        function signup() {
+            const pseudo = document.getElementById('signupPseudo').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const passwordConfirm = document.getElementById('signupPasswordConfirm').value;
+
+            if (pseudo && email && password && passwordConfirm) {
+                if (password === passwordConfirm) {
+                    alert("Inscription réussie!");
+                    window.location.href = 'index.html';
+                } else {
+                    alert("Les mots de passe ne correspondent pas.");
+                }
+            } else {
+                alert("Veuillez remplir tous les champs.");
+            }
+        }
+    </script>
+</body>
+
+</html>

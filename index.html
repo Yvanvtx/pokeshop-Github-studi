@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pokeshop</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #f8b400;
+            padding: 10px 20px;
+            color: white;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 40px;
+            padding: 20px;
+        }
+
+        .item {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            width: 200px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .item img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+
+        .item h3 {
+            margin: 10px 0;
+        }
+
+        .item p {
+            color: #777;
+        }
+
+        .item .price {
+            font-size: 1.2em;
+            color: #333;
+            margin: 10px 0;
+        }
+
+        .item button {
+            background-color: #f8b400;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .item button:hover {
+            background-color: #e7a200;
+        }
+
+        .header-buttons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .cart {
+            background-color: #f8b400;
+            padding: 10px 20px;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .cart:hover {
+            background-color: #e7a200;
+        }
+
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        #cartModal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 800px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .buy-button {
+            margin-top: 20px;
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .buy-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>pokeshop</h1>
+        <div class="header-buttons">
+            <div class="cart" onclick="openCart()">Panier (<span id="cartCount">0</span>)</div>
+            <button class="button" onclick="window.location.href='singnup.html'">Inscription</button>
+            <button class="button" onclick="window.location.href='login.html'">Connexion</button>
+        </div>
+    </div>
+    <div class="container" id="itemsContainer">
+        <!-- Les articles seront générés ici -->
+    </div>
+
+    <div id="cartModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCart()">&times;</span>
+            <h2>Votre Panier</h2>
+            <ul id="cartItems"></ul>
+            <div><strong>Total: €<span id="totalPrice">0.00</span></strong></div>
+            <button class="buy-button" onclick="buyItems()">Acheter</button>
+        </div>
+    </div>
+
+    <script>
+        // Simulate user login state
+        let isLoggedIn = false; // Change this to true to simulate a logged-in user
+
+        const items = [];
+        for (let i = 1; i <= 35; i++) {
+            items.push({
+                name: `Article ${i}`,
+                description: `Description de l'article ${i}.`,
+                price: (10 + i).toFixed(2),
+                imgSrc: `https://via.placeholder.com/150`
+            });
+        }
+
+        const container = document.getElementById('itemsContainer');
+
+        items.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'item';
+            itemDiv.innerHTML = `
+                <img src="${item.imgSrc}" alt="${item.name}">
+                <h3>${item.name}</h3>
+                <p>${item.description}</p>
+                <div class="price">€${item.price}</div>
+                <button onclick="addToCart('${item.name}', ${item.price})">Ajouter au panier</button>
+            `;
+            container.appendChild(itemDiv);
+        });
+
+        let cart = [];
+
+        function addToCart(name, price) {
+            cart.push({ name, price });
+            document.getElementById('cartCount').innerText = cart.length;
+            alert(`${name} a été ajouté au panier.`);
+        }
+
+        function openCart() {
+            const cartItems = document.getElementById('cartItems');
+            cartItems.innerHTML = '';
+            let totalPrice = 0;
+            cart.forEach(item => {
+                const li = document.createElement('li');
+                li.innerText = `${item.name} - €${item.price.toFixed(2)}`;
+                cartItems.appendChild(li);
+                totalPrice += item.price;
+            });
+            document.getElementById('totalPrice').innerText = totalPrice.toFixed(2);
+            document.getElementById('cartModal').style.display = 'block';
+        }
+
+        function closeCart() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        function buyItems() {
+            if (!isLoggedIn) {
+                alert("Vous devez être connecté pour acheter des articles.");
+                return;
+            }
+            alert("Achat réussi! Merci pour votre commande.");
+            cart = [];
+            document.getElementById('cartCount').innerText = 0;
+            closeCart();
+        }
+
+        window.onclick = function (event) {
+            if (event.target == document.getElementById('cartModal')) {
+                closeCart();
+            }
+        }
+    </script>
+</body>
+
+</html>
